@@ -1,0 +1,5 @@
+Username,Password,Role,Email,Last_Login,Status,Permissions,Department
+analyst,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,Analyst,john@company.com,2024-06-01 09:15,Active,Read,Risk
+manager,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,Manager,sarah@company.com,2024-06-01 08:30,Active,Read/Write,Compliance
+admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Admin,mike@company.com,2024-05-31 16:45,Active,Full,IT
+sanjay,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,User,sanjay9852k@gmail.com,Never,Active,User,General
