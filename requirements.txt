@@ -1,0 +1,11 @@
+streamlit
+pandas
+numpy
+xgboost
+matplotlib
+plotly
+shap
+scikit-learn
+yagmail
+seaborn
+python-dotenv
