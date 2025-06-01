@@ -3,6 +3,8 @@ pandas
 numpy
 xgboost
 matplotlib
+imbalanced-learn
+lightgbm
 plotly
 shap
 scikit-learn
