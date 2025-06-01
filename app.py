@@ -510,47 +510,70 @@ def send_advanced_email_alert(to_email, transaction_data, risk_data, model_outpu
 
 # Add this after imports
 def setup_email_config():
-    """Setup email configuration"""
-    return {
-        "smtp_user": os.environ.get('EMAIL_USER'),
-        "smtp_password": os.environ.get('EMAIL_PASSWORD'),
-        "smtp_server": os.environ.get('SMTP_SERVER', 'smtp.gmail.com'),
-        "smtp_port": int(os.environ.get('SMTP_PORT', 587))
-    }
+    """Setup email configuration using Streamlit secrets"""
+    try:
+        if not st.secrets.get("email"):
+            st.error("Email configuration not found in secrets")
+            return None
+            
+        return {
+            "smtp_user": st.secrets.email.SMTP_USER,
+            "smtp_password": st.secrets.email.SMTP_PASSWORD,
+            "smtp_server": st.secrets.email.SMTP_SERVER,
+            "smtp_port": st.secrets.email.SMTP_PORT
+        }
+    except Exception as e:
+        st.error(f"Error loading email configuration: {str(e)}")
+        return None
 
 def send_fraud_alert_email(user_email, transaction_details, risk_level):
-    """Send fraud alert email"""
+    """Send fraud alert email with proper SSL configuration"""
     try:
-        # Get email config
-        config = setup_email_config()
-        
-        # Check if credentials exist
-        if not config["smtp_user"] or not config["smtp_password"]:
-            st.error("Email credentials not found in environment variables")
-            return False, "Missing email credentials"
-        
-        # Initialize yagmail
+        # Initialize yagmail with SSL settings
         yag = yagmail.SMTP(
-            user=config["smtp_user"],
-            password=config["smtp_password"]
+            user="sanjay.dev925@gmail.com",
+            password="splh yrfu ebuq ghve",
+            host='smtp.gmail.com',
+            smtp_ssl=True,  # Enable SSL
+            port=465  # Use SSL port instead of 587
         )
         
-        # Send email
-        yag.send(
-            to=user_email,
-            subject=f"🚨 FRAUD ALERT: {risk_level} Risk Detected",
-            contents=f"""
-            Transaction Details:
-            Amount: {transaction_details['amount']}
-            Time: {transaction_details['timestamp']}
-            Risk Level: {risk_level}
-            """
-        )
+        subject = f"🚨 FRAUD ALERT: {risk_level} Risk Detected"
         
-        return True, "Email sent successfully"
+        body = f"""
+        🔒 Fraud Detection Alert
         
+        Risk Level: {risk_level}
+        
+        Transaction Details:
+        • Amount: {transaction_details['amount']}
+        • Time: {transaction_details['timestamp']}
+        • Location: {transaction_details['location']}
+        • Risk Score: {transaction_details['risk_score']}
+        
+        Please review this transaction immediately.
+        """
+        
+        # Send email with error handling
+        try:
+            yag.send(
+                to=user_email,
+                subject=subject,
+                contents=body
+            )
+            st.success(f"🚨 Alert email sent successfully to {user_email}")
+            return True, "Email sent successfully"
+            
+        except Exception as e:
+            st.error(f"Failed to send email: {str(e)}")
+            return False, f"Failed to send email: {str(e)}"
+            
+        finally:
+            yag.close()
+            
     except Exception as e:
-        return False, f"Failed to send email: {str(e)}"
+        st.error(f"Email configuration error: {str(e)}")
+        return False, f"Email configuration error: {str(e)}"
 
 # Modify the risk analysis section to include email alerts
 def process_transaction_with_alerts(user_email, transaction_data, risk_data):
@@ -1868,7 +1891,7 @@ if uploaded_file is not None:
                         color_discrete_map={
                             'LOW': 'green',
                             'MEDIUM': 'yellow',
-                            'HIGH': 'orange',
+                            'ORANGE': 'orange',
                             'CRITICAL': 'red'
                         }
                     )
