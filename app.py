@@ -656,6 +656,18 @@ selected_role = st.sidebar.selectbox("👥 Select Role", available_roles)
 username = st.sidebar.text_input("👤 Username")
 password = st.sidebar.text_input("🔑 Password", type="password")
 
+def update_last_login(username):
+    """Update user's last login time"""
+    try:
+        users_df = load_users()
+        current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        users_df.loc[users_df['Username'] == username, 'Last_Login'] = current_time
+        save_users_data(users_df)
+        return True
+    except Exception as e:
+        st.error(f"Error updating last login: {str(e)}")
+        return False
+
 # Login button (single instance)
 if st.sidebar.button("🔑 Login", key="main_login_button"):
     if username and password:
@@ -667,7 +679,10 @@ if st.sidebar.button("🔑 Login", key="main_login_button"):
             st.session_state.username = username
             st.session_state.login_time = datetime.datetime.now()  # Set login time
             st.session_state.login_attempts = 0
-            st.success(f"✅ Welcome {username}! Authenticated as {user_role}")
+            if update_last_login(username):
+                st.success(f"✅ Welcome {username}! Authenticated as {user_role}")
+            else:
+                st.warning("Login successful but failed to update last login time")
             st.rerun()
         else:
             st.session_state.login_attempts += 1
@@ -2043,7 +2058,7 @@ if st.session_state.get('user_role') == 'Admin':
         # Show Users Table
         if st.session_state.get('show_users', False):
             st.markdown("#### 📋 Current Users")
-            display_df = users_df.drop('Password', axis=1)
+            display_df = users_df.drop(['Password', 'Email'], axis=1)
             st.dataframe(display_df, use_container_width=True)
         
         # Add New User Form
@@ -2128,7 +2143,6 @@ if st.session_state.get('user_role') == 'Admin':
                 
                 # Add username field (disabled/readonly)
                 username = st.text_input("Username", value=user_data['Username'], disabled=True)
-                edit_email = st.text_input("Email", value=user_data['Email'])
                 edit_role = st.selectbox(
                     "Role",
                     options=["User", "Analyst", "Manager", "Admin"],
@@ -2143,6 +2157,12 @@ if st.session_state.get('user_role') == 'Admin':
                     "Admin": ["User", "Read", "Read/Write", "Full"]
                 }
                 
+                # Automatically select the highest permission for the role
+                default_permission = role_permissions[edit_role][-1]  # Get highest permission for role
+        
+                # Show current permission (read-only)
+                st.text(f"Permission Level: {default_permission}")
+
                 available_permissions = role_permissions[edit_role]
                 current_permission = user_data['Permissions']
                 if current_permission not in available_permissions:
@@ -2171,11 +2191,10 @@ if st.session_state.get('user_role') == 'Admin':
                     if st.form_submit_button("💾 Save Changes"):
                         try:
                             # Update user data
-                            users_df.loc[users_df['Username'] == st.session_state.selected_user, 'Email'] = edit_email
                             users_df.loc[users_df['Username'] == st.session_state.selected_user, 'Role'] = edit_role
                             users_df.loc[users_df['Username'] == st.session_state.selected_user, 'Status'] = edit_status
                             users_df.loc[users_df['Username'] == st.session_state.selected_user, 'Department'] = edit_department
-                            users_df.loc[users_df['Username'] == st.session_state.selected_user, 'Permissions'] = edit_permissions
+                            users_df.loc[users_df['Username'] == st.session_state.selected_user, 'Permissions'] = default_permission
                             
                             save_users_data(users_df)
                             st.success(f"✅ User {username} updated successfully!")
@@ -2251,43 +2270,6 @@ if st.session_state.get('user_role') == 'Admin':
         if st.button("💾 Save Configuration"):
             st.success("✅ Configuration saved successfully")
 
-# Password Change Functionality (Admin only)
-def change_password(username, old_password, new_password):
-    """Change user password"""
-    users_df = load_users()
-    user_idx = users_df.index[users_df['Username'] == username].tolist()
-    
-    if not user_idx:
-        return False, "User not found"
-        
-    stored_hash = users_df.loc[user_idx[0], 'Password']
-    if not verify_password(stored_hash, old_password):
-        return False, "Invalid old password"
-        
-    users_df.loc[user_idx[0], 'Password'] = hash_password(new_password)
-    users_df.to_csv(os.path.join(os.path.dirname(__file__), 'data', 'users.csv'), index=False)
-    return True, "Password changed successfully"
-
-if st.session_state.get('authenticated', False) and st.session_state.get('user_role') == 'Admin':
-    with st.expander("🔐 Change User Password"):
-        users_df = load_users_data()  # Load users data here
-        if not users_df.empty:
-            target_user = st.selectbox("Select User", users_df['Username'].tolist())
-            new_password = st.text_input("New Password", type="password")
-            confirm_password = st.text_input("Confirm New Password", type="password")
-            
-            if st.button("Update Password"):
-                if new_password != confirm_password:
-                    st.error("Passwords do not match!")
-                else:
-                    users_df.loc[users_df['Username'] == target_user, 'Password'] = hash_password(new_password)
-                    if save_users_data(users_df):
-                        st.success(f"Password updated for {target_user}")
-                        st.rerun()
-                    else:
-                        st.error("Failed to update password")
-        else:
-            st.error("No users found in database")
 
 # New user registration form
 if 'registering' not in st.session_state:
@@ -2405,4 +2387,3 @@ if risk_data['risk_level'] in ['CRITICAL', 'HIGH']:
             
     except Exception as e:
         st.error(f"Error sending alert: {str(e)}")
-
