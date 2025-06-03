@@ -1938,7 +1938,7 @@ if uploaded_file is not None:
                     fig_amount = px.box(
                         final_df,
                         x='risk_level',
-                        y='amount',
+                        y='amt',
                         color='risk_level',
                         title="Transaction Amount Distribution by Risk Level"
                     )
