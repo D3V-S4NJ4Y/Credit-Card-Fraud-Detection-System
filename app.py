@@ -564,7 +564,7 @@ else:
         • Consider temporary hold on similar transaction patterns
         • Review customer's recent transaction history
         
-        Generated at: {datetime.datetime.now(india).strftime('%Y-%m-%d %H:%M:%S')}
+        Generated at timezone India ('Asia/Kolkata'): {datetime.datetime.now(india).strftime('%Y-%m-%d %H:%M:%S')}
         
         Best regards,
         Advanced AI Fraud Detection System
