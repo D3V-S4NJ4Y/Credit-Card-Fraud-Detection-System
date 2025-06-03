@@ -63,7 +63,7 @@ Credit-Card-Fraud-Detection/
 │   ├── users.csv                 # User credentials and roles
 │   ├── transactions.csv          # Dataset of credit card transactions
 │   └── models/                   # ML model implementations
-│       ├── xgb_model.json       # XGBoost model file
+│       ├── xgb_model.json        # XGBoost model file
 │       └── features.pkl         # Saved feature configurations
 │
 ├── 📁 .streamlit/               # Streamlit configurations
@@ -82,7 +82,7 @@ Credit-Card-Fraud-Detection/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/credit-card-fraud-detection.git
+git clone https://github.com/D3V-S4NJ4Y/Credit-Card-Fraud-Detection-System
 ```
 
 2. Install required packages:
@@ -96,15 +96,15 @@ streamlit run app.py
 
 ## 👥 User Roles
 
+   **Default--> Usersname: Password**
+   - admin: admin
+   - manager: 123456
+   - Register New User with currect Email id for Email Alerts
+
 1. **User**
    - View basic transaction details
    - Submit transactions
    - Receive alerts
-
-2. **Analyst**
-   - Basic analysis
-   - View detailed reports
-   - Monitor transactions
 
 3. **Manager**
    - Advanced analysis
@@ -179,7 +179,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## 👨‍💻 Author
 **Sanjay Kumar**
 - Email: sanjay.dev925@gmail.com
-- GitHub: [Your GitHub Profile](https://github.com/yourusername)
+- GitHub: [Your GitHub Profile](https://github.com/D3V-S4NJ4Y)
 
 ## 🙏 Acknowledgments
 - Machine Learning libraries contributors
