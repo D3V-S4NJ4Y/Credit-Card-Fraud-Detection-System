@@ -99,7 +99,7 @@ streamlit run app.py
    **Default--> Usersname: Password**
    - admin: admin
    - manager: 123456
-   - Register New User with currect Email id for Email Alerts
+   - Register New User with Correct Email id for Email Alerts
 
 1. **User**
    - View basic transaction details
