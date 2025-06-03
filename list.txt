@@ -1,4 +1,0 @@
---> Users: Password
-analyst: 123456
-manager: 123456
-admin: admin
