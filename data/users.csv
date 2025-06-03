@@ -1,5 +1,5 @@
 Username,Password,Role,Email,Last_Login,Status,Permissions,Department
 admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Admin,admin@company.com,2025-06-03 18:15:34,Active,Full,Operations
 manager,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,Manager,manager@company.com,2025-06-03 17:29:06,Active,Read/Write,Compliance
-user,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,User,user@gmail.com,2025-06-03 18:02:40,Active,User,General
+user,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,User,user@gmail.com,2025-06-03 18:02:40,Active,Read,General
 sanjay,99d0f816344196095f706f4a87fd0959ef836a09220054c37d78448951ab064f,User,sanjay9852k@gmail.com,2025-06-03 18:12:26,Active,Read,IT
