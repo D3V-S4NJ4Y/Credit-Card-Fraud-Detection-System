@@ -45,10 +45,9 @@ import hashlib
 import json
 from datetime import timedelta
 import sqlite3
-import datetime
 import pytz
 
-# Time Zone For example, for India:
+# ------------------- Timezone Configuration -------------------
 india = pytz.timezone('Asia/Kolkata')
 current_time = datetime.datetime.now(india).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -122,7 +121,7 @@ def authenticate_user(username, password):
 def update_last_login(username):
     try:
         users_df = load_users()
-        current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        current_time = datetime.datetime.now(india).strftime('%Y-%m-%d %H:%M:%S')
         users_df.loc[users_df['Username'] == username, 'Last_Login'] = current_time
         save_users_data(users_df)
         return True
@@ -133,7 +132,7 @@ def update_last_login(username):
 def check_session_expired():
     if not st.session_state.get('login_time'):
         return
-    current_time = datetime.datetime.now()
+    current_time = datetime.datetime.now(india)
     session_duration = current_time - st.session_state.login_time
     if session_duration.total_seconds() > 3600:
         st.session_state.authenticated = False
@@ -213,7 +212,7 @@ if st.sidebar.button("🔑 Login", key="first_login_button"):
             st.session_state.authenticated = True
             st.session_state.user_role = user_role
             st.session_state.username = username
-            st.session_state.login_time = datetime.datetime.now()
+            st.session_state.login_time = datetime.datetime.now(india)
             st.session_state.login_attempts = 0
             if update_last_login(username):
                 st.success(f"✅ Welcome {username}! Authenticated as {user_role}")
@@ -226,7 +225,7 @@ if st.sidebar.button("🔑 Login", key="first_login_button"):
             if remaining_attempts > 0:
                 st.error(f"🚫 Invalid credentials or role mismatch. {remaining_attempts} attempts remaining.")
             else:
-                current_time = datetime.datetime.now()
+                current_time = datetime.datetime.now(india)
                 st.session_state.locked_until = current_time + datetime.timedelta(minutes=5)
                 st.error("🔒 Too many failed attempts. Account locked for 5 minutes.")
                 st.session_state.login_attempts = 0
@@ -271,7 +270,7 @@ else:
             features = {}
             
             # Transaction velocity (last hour, 24h, 7 days)
-            now = datetime.datetime.now()
+            now = datetime.datetime.now(india)
             hour_ago = now - timedelta(hours=1)
             day_ago = now - timedelta(days=1)
             week_ago = now - timedelta(days=7)
@@ -487,7 +486,7 @@ else:
             actions = self.alert_rules.get(risk_level, {})
             
             alert_info = {
-                'timestamp': datetime.datetime.now(),
+                'timestamp': datetime.datetime.now(india),
                 'risk_level': risk_level,
                 'risk_score': risk_data['total_risk_score'],
                 'transaction_id': self.generate_transaction_id(transaction_data),
@@ -565,7 +564,7 @@ else:
         • Consider temporary hold on similar transaction patterns
         • Review customer's recent transaction history
         
-        Generated at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+        Generated at: {datetime.datetime.now(india).strftime('%Y-%m-%d %H:%M:%S')}
         
         Best regards,
         Advanced AI Fraud Detection System
@@ -663,7 +662,7 @@ else:
             # Prepare transaction details for email
             email_transaction_details = {
                 'amount': transaction_data.get('amount', 'N/A'),
-                'timestamp': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'timestamp': datetime.datetime.now(india).strftime('%Y-%m-%d %H:%M:%S'),
                 'location': transaction_data.get('location', 'Unknown'),
                 'risk_score': f"{risk_data['total_risk_score']:.2%}"
             }
@@ -715,7 +714,7 @@ else:
         """Update user's last login time"""
         try:
             users_df = load_users()
-            current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            current_time = datetime.datetime.now(india).strftime('%Y-%m-%d %H:%M:%S')
             users_df.loc[users_df['Username'] == username, 'Last_Login'] = current_time
             save_users_data(users_df)
             return True
@@ -852,7 +851,7 @@ else:
 
     user_history = [
         {
-            'timestamp': datetime.datetime.now() - timedelta(hours=np.random.randint(1, 168)),
+            'timestamp': datetime.datetime.now(india) - timedelta(hours=np.random.randint(1, 168)),
             'amount': np.random.uniform(10, 1000),
             'category': np.random.choice(['grocery_pos', 'gas_transport', 'shopping_net'])
         }
@@ -1180,7 +1179,7 @@ else:
             realtime_data = []
             for i in range(10):
                 transaction = {
-                    'Time': (datetime.datetime.now() - timedelta(seconds=i*5)).strftime('%H:%M:%S'),
+                    'Time': (datetime.datetime.now(india) - timedelta(seconds=i*5)).strftime('%H:%M:%S'),
                     'Amount': f"${np.random.uniform(10, 2000):.0f}",
                     'Risk': np.random.choice(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'], 
                     p=[0.7, 0.2, 0.08, 0.02]),
@@ -1801,10 +1800,10 @@ if st.session_state.get('authenticated', False):
 
             'Accuracy': [0.942, 0.938, 0.895, 0.901],
             'Last Updated': [
-                datetime.datetime.now() - timedelta(days=1),
-                datetime.datetime.now() - timedelta(hours=2),
-                datetime.datetime.now() - timedelta(days=10),
-                datetime.datetime.now() - timedelta(hours=5)
+                datetime.datetime.now(india) - timedelta(days=1),
+                datetime.datetime.now(india) - timedelta(hours=2),
+                datetime.datetime.now(india) - timedelta(days=10),
+                datetime.datetime.now(india) - timedelta(hours=5)
             ]
         }
         
@@ -2017,7 +2016,7 @@ if uploaded_file is not None:
                         FRAUD DETECTION BATCH ANALYSIS SUMMARY
                         =====================================
                         
-                        Analysis Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+                        Analysis Date: {datetime.datetime.now(india).strftime('%Y-%m-%d %H:%M:%S')}
                         Total Transactions Processed: {len(df):,}
                         
                         RISK SUMMARY:
