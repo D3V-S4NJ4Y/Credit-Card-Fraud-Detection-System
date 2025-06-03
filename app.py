@@ -139,6 +139,11 @@ def check_session_expired():
     elif session_duration.total_seconds() > 3300:
         st.warning("⚠️ Your session will expire in 5 minutes. Please save your work.")
 
+st.markdown('<h1 class="main-header">💳 Credit Card & Transaction Fraud Detection System</h1>', unsafe_allow_html=True)
+
+# Enhanced Authentication
+st.sidebar.markdown("### 🔐 System Access Control")
+
 # ------------------- Registration Form (Single Instance) -------------------
 if not st.session_state.get('authenticated', False):
     st.sidebar.markdown("---")
@@ -173,7 +178,7 @@ if st.session_state.get('registering', False) and not st.session_state.get('auth
                             'Role': 'User',
                             'Last_Login': 'Never',
                             'Status': 'Active',
-                            'Permissions': 'User',
+                            'Permissions': 'Read',
                             'Department': new_department
                         }])
                         users_df = pd.concat([users_df, new_user], ignore_index=True)
@@ -703,8 +708,6 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown('<h1 class="main-header">💳 Credit Card & Transaction Fraud Detection System</h1>', unsafe_allow_html=True)
-
     def update_last_login(username):
         """Update user's last login time"""
         try:
@@ -764,7 +767,7 @@ else:
                                 'Role': 'User',
                                 'Last_Login': 'Never',
                                 'Status': 'Active',
-                                'Permissions': 'User',
+                                'Permissions': 'Read',
                                 'Department': new_department
                             }])
                             
@@ -2320,7 +2323,7 @@ if st.session_state.get('registering', False):
                         'Role': 'User',
                         'Last_Login': 'Never',
                         'Status': 'Active',
-                        'Permissions': 'User',
+                        'Permissions': 'Read',
                         'Department': 'General'
                     }])
                     
