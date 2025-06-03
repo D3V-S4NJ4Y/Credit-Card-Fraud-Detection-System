@@ -45,6 +45,12 @@ import hashlib
 import json
 from datetime import timedelta
 import sqlite3
+import datetime
+import pytz
+
+# Time Zone For example, for India:
+india = pytz.timezone('Asia/Kolkata')
+current_time = datetime.datetime.now(india).strftime('%Y-%m-%d %H:%M:%S')
 
 # ------------------- Session State Initialization -------------------
 if 'authenticated' not in st.session_state:
