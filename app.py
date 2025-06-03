@@ -688,19 +688,16 @@ else:
             margin-bottom: 2rem;
         }
         .risk-critical {
-            background-color: #ffebee;
-            border-left: 5px solid #f44336;
+            border-left: 5px solid #ffff00;
             padding: 1rem;
             border-radius: 5px;
         }
         .risk-high {
-            background-color: #fff3e0;
-            border-left: 5px solid #ff9800;
+            border-left: 5px solid #ff0000;
             padding: 1rem;
             border-radius: 5px;
         }
         .risk-medium {
-            background-color: #e8f5e8;
             border-left: 5px solid #4caf50;
             padding: 1rem;
             border-radius: 5px;
